@@ -31,19 +31,16 @@ function ship(){
 
 const move = (e) => {
     //console.log(e.keyCode)
+    //console.log(shotY);
     switch(e.keyCode){
         case 38:
             if(shipY > 20){
                 shipY -= velocity;
-                shipYNow -= 24; 
-                shotY = shipYNow + (shipH / 2);
             }
         break;
         case 40:
             if(shipY < 380 - shipH){
                 shipY += velocity;
-                shipYNow += 24;
-                shotY = shipYNow + (shipH / 2);
             }
         break;
         case 87:
@@ -59,6 +56,8 @@ const move = (e) => {
         case 32:
             shotBall = true;
             shotSize = 10;
+            blockShotY = true;
+            console.log(shotY);
          break;
         }
     }
@@ -72,35 +71,76 @@ const move = (e) => {
     let shotSize = 10;
     let shotSpeed = 3;
     let shotBall = false;
+    let blockShotY = false;
     function shot(){
         ctx.fillStyle = 'white';
         ctx.fillRect(shotX,shotY,shotSize,shotSize);
         shotX += shotSpeed;
         
-        shotY = shipY + (shipH / 2);
 
     
     }
-    console.log(shipY);
+
+    //Enemy
+    const enemy1 = new Image(); enemy1.src = "./IMG/Enemy.png";
+    const enemy2 = new Image(); enemy2.src = "./IMG/Enemy2.png";
+    const enemy3 = new Image(); enemy3.src = "./IMG/Enemy3.png";
+    const tableEnemy = [enemy1,enemy2,enemy3];
+    const tableY = [32,56,80,104,128,152,176,200,224,248,272,296,320,344,368];
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+    let losEnemy = getRandomIntInclusive(0,2);
+    let losEnemyY = getRandomIntInclusive(0,14);
+    
+    let enemyX = 1024;
+    let enemySize = 30;
+    let speedEnemy = 3; 
+
+    function spawnEnemy(){
+        ctx.drawImage(tableEnemy[losEnemy],enemyX,tableY[losEnemyY],enemySize,enemySize);
+        enemyX -= speedEnemy;
+        if(enemyX <= 0){
+            enemySize = 30;
+            enemyX = 1024;
+            losEnemyY = getRandomIntInclusive(0,14);
+            losEnemy = getRandomIntInclusive(0,2);
+            spawnEnemy();
+            
+        }
+        
+
+    }
+    
     
     
     //Engine
     function Engine() {
         back();
         ship();
-
+        spawnEnemy();
+    
+        
         if(shotBall == true){
            shot();
             if(shotX >= 1024){
 
-                shotBall = false;
                 shotX = shipX + 80;
                 shotSize = 0;
+                blockShotY = false;
+                shotBall = false;
             
                 
                 
             }
+        
         }
+        if(blockShotY == false){
+            shotY = shipY + (shipH / 2);
+            };
 
     
 }
