@@ -87,6 +87,7 @@ const move = (e) => {
     let shotSpeed = 5;
     let shotBall = false;
     let blockShotY = false;
+    
     function shot(){
         ctx.fillStyle = 'white';
         ctx.fillRect(shotX,shotY,shotSize,shotSize);
@@ -149,7 +150,7 @@ const move = (e) => {
             lifeLose = false;
             heartSizeAll -= 1;
             if(lifeLose == false){
-                let x = setInterval(() =>{},10);
+                let x = setInterval(() =>{},1000);
                 setTimeout(() =>{lifeLose = true;clearInterval(x);},10000);
                 }
                 console.log(lifeLose);
