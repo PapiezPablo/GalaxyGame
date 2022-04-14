@@ -33,6 +33,7 @@ function back(){
 
 //Ship
 const shipArt = new Image(); shipArt.src = "./IMG/ship.png";
+const shipDmg = new Image(); shipDmg.src = "./IMG/ship2.png";
 let shipX = 100;
 let shipY = 170;
 let velocity = 24;
@@ -42,7 +43,9 @@ let shipYNow = 200;
 
 function ship(){
     ctx.drawImage(shipArt,shipX,shipY,shipW,shipH);
+
 }
+
 
 const move = (e) => {
     //console.log(e.keyCode)
@@ -150,7 +153,7 @@ const move = (e) => {
             lifeLose = false;
             heartSizeAll -= 1;
             if(lifeLose == false){
-                let x = setInterval(() =>{},1000);
+                let x = setInterval(() =>{},1);
                 setTimeout(() =>{lifeLose = true;clearInterval(x);},10000);
                 }
                 console.log(lifeLose);
