@@ -14,6 +14,7 @@ const backArt = new Image(); backArt.src = "./IMG/back.jpg";
 
 function back(){
     ctx.drawImage(backArt,0,0,cw,ch);
+    spawnEnemy();
     ctx.fillStyle = 'white';
     ctx.font = "Italic 50px Times New Roman";
     ctx.textAlign = "left";
@@ -33,7 +34,6 @@ function back(){
 
 //Ship
 const shipArt = new Image(); shipArt.src = "./IMG/ship.png";
-const shipDmg = new Image(); shipDmg.src = "./IMG/ship2.png";
 let shipX = 100;
 let shipY = 170;
 let velocity = 24;
@@ -153,20 +153,38 @@ const move = (e) => {
             lifeLose = false;
             heartSizeAll -= 1;
             if(lifeLose == false){
-                let x = setInterval(() =>{},1);
-                setTimeout(() =>{lifeLose = true;clearInterval(x);},10000);
+                let x = setInterval(flashingAnimation,10);
+                setTimeout(() =>{lifeLose = true;clearInterval(x);},5000);
                 }
                 console.log(lifeLose);
         }
+        if(heartSizeAll == 2){
+            heartSize3 = 0;
+        }else if(heartSizeAll == 1){
+            heartSize2 = 0;
+        }else if(heartSizeAll == 0){
+            heartSize1 = 0;
+        }
     }
     }
+    function flashingAnimation(){ 
+        ctx.drawImage(backArt,0,0,cw,ch);
+
+        ctx.drawImage(tableEnemy[losEnemy],enemyX,tableY[losEnemyY],enemySize,enemySize);
+
+        ctx.fillText(score,900,40);
+
+        ctx.drawImage(lifeTab[0],30,150,heartSize1,heartSize1);
+        ctx.drawImage(lifeTab[1],30,200,heartSize2,heartSize2);
+        ctx.drawImage(lifeTab[2],30,250,heartSize3,heartSize3);
+    }
+    
     
 
     //Engine
     function Engine() {
         back();
         ship();
-        spawnEnemy();
         loseLife();
         
         if(shotBall == true){
