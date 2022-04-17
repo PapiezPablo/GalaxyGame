@@ -15,6 +15,7 @@ const backArt = new Image(); backArt.src = "./IMG/back.jpg";
 function back(){
     ctx.drawImage(backArt,0,0,cw,ch);
     spawnEnemy();
+    spawnEnemyTwo();
     ctx.fillStyle = 'white';
     ctx.font = "Italic 50px Times New Roman";
     ctx.textAlign = "left";
@@ -104,6 +105,7 @@ const move = (e) => {
     const enemy1 = new Image(); enemy1.src = "./IMG/Enemy.png";
     const enemy2 = new Image(); enemy2.src = "./IMG/Enemy2.png";
     const enemy3 = new Image(); enemy3.src = "./IMG/Enemy3.png";
+    const heartAdd = new Image(); heartAdd.src = "./IMG/heart.png";
     const tableEnemy = [enemy1,enemy2,enemy3];
     const tableY = [32,56,80,104,128,152,176,200,224,248,272,296,320,344,368];
     function getRandomIntInclusive(min, max) {
@@ -119,6 +121,14 @@ const move = (e) => {
     let enemySize = 30;
     let speedEnemy = 3; 
 
+    let tableEnemyTwo = [enemy1,enemy2,enemy3, heartAdd];
+    let tableYTwo = [32,56,80,104,128,152,176,200,224,248,272,296,320,344,368];
+    let losEnemyTwo = getRandomIntInclusive(0,3);
+    let losEnemyYTwo = getRandomIntInclusive(0,14);
+    let enemyXTwo = 1024;
+    let enemySizeTwo = 30;
+    let speedEnemyTwo = 3;
+
     function spawnEnemy(){
         ctx.drawImage(tableEnemy[losEnemy],enemyX,tableY[losEnemyY],enemySize,enemySize);
         enemyX -= speedEnemy;
@@ -132,9 +142,25 @@ const move = (e) => {
         }
         
 
+
     }
+
+    function spawnEnemyTwo(){
+            ctx.drawImage(tableEnemyTwo[losEnemyTwo],enemyXTwo,tableYTwo[losEnemyYTwo],enemySizeTwo,enemySizeTwo);
+            enemyXTwo -= speedEnemyTwo;
+            if(enemyXTwo <= -100){
+                enemySizeTwo = 30;
+                enemyXTwo = 1024;
+                losEnemyYTwo = getRandomIntInclusive(0,14);
+                losEnemyTwo = getRandomIntInclusive(0,3);
+                spawnEnemyTwo();
+                
+            }
+           
+        }
+    
     //Score
-    let score = 0;
+    let score = 100;
     function getScore(){
         score += 10;
     }
@@ -147,6 +173,8 @@ const move = (e) => {
     let heartSizeAll = 3;
     let lifeTab = [life,life,life];
     let lifeLose = true;
+
+
     function loseLife(){
         if(lifeLose == true){
         if((enemyX <= shipX + shipH)&& (tableY[losEnemyY] + enemySize / 2 >= shipY) && (tableY[losEnemyY] + enemySize / 2 <= shipY + shipH) && (enemyX >= shipX)){
@@ -158,14 +186,23 @@ const move = (e) => {
                 }
                 console.log(lifeLose);
         }
-        if(heartSizeAll == 2){
-            heartSize3 = 0;
-        }else if(heartSizeAll == 1){
-            heartSize2 = 0;
-        }else if(heartSizeAll == 0){
-            heartSize1 = 0;
+        if((enemyXTwo <= shipX + shipH)&& (tableYTwo[losEnemyYTwo] + enemySizeTwo / 2 >= shipY) && (tableYTwo[losEnemyYTwo] + enemySizeTwo / 2 <= shipY + shipH) && (enemyXTwo >= shipX)){
+            lifeLose = false;
+            heartSizeAll -= 1;
+            if(lifeLose == false){
+                let x = setInterval(flashingAnimation,10);
+                setTimeout(() =>{lifeLose = true;clearInterval(x);},5000);
+                }
+                console.log(lifeLose);
         }
+        
+
     }
+    }
+
+    function getLife(){
+        heartSizeAll += 1;
+        
     }
     function flashingAnimation(){ 
         ctx.drawImage(backArt,0,0,cw,ch);
@@ -177,6 +214,9 @@ const move = (e) => {
         ctx.drawImage(lifeTab[0],30,150,heartSize1,heartSize1);
         ctx.drawImage(lifeTab[1],30,200,heartSize2,heartSize2);
         ctx.drawImage(lifeTab[2],30,250,heartSize3,heartSize3);
+        if(score >= 100){
+            ctx.drawImage(tableEnemyTwo[losEnemyTwo],enemyXTwo,tableYTwo[losEnemyYTwo],enemySizeTwo,enemySizeTwo);
+        }
     }
     
     
@@ -186,7 +226,7 @@ const move = (e) => {
         back();
         ship();
         loseLife();
-        
+        console.log(heartSizeAll);
         if(shotBall == true){
            shot();
             if((shotX <= enemyX + enemySize)&& (shotY + shotSize / 2 >= tableY[losEnemyY]) && (shotY + shotSize / 2 <= tableY[losEnemyY] + enemySize) && (shotX >= enemyX)){
@@ -205,25 +245,76 @@ const move = (e) => {
 
                 //Score
                 getScore();
-                console.log(score);
+                //console.log(score);
 
                 
             
                 
                 
-            }else if(shotX >= 1024){
+            }else if((shotX <= enemyXTwo + enemySizeTwo)&& (shotY + shotSize / 2 >= tableYTwo[losEnemyYTwo]) && (shotY + shotSize / 2 <= tableYTwo[losEnemyYTwo] + enemySizeTwo) && (shotX >= enemyXTwo) && (losEnemyTwo == 3)){
+                shotX = shipX + 80;
+                shotSize = 0;
+                blockShotY = false;
+                shotBall = false;
+
+                enemySizeTwo = 30;
+                enemyXTwo = 1024;
+                losEnemyYTwo = getRandomIntInclusive(0,14);
+                losEnemyTwo = getRandomIntInclusive(0,3);
+                spawnEnemyTwo();
+
+               
+            
+               if(heartSizeAll < 3){
+                getLife();
+               }
+               
+
+            }else if((shotX <= enemyXTwo + enemySizeTwo)&& (shotY + shotSize / 2 >= tableYTwo[losEnemyYTwo]) && (shotY + shotSize / 2 <= tableYTwo[losEnemyYTwo] + enemySizeTwo) && (shotX >= enemyXTwo)){
+                shotX = shipX + 80;
+                shotSize = 0;
+                blockShotY = false;
+                shotBall = false;
+
+                enemySizeTwo = 30;
+                enemyXTwo = 1024;
+                losEnemyYTwo = getRandomIntInclusive(0,14);
+                losEnemyTwo = getRandomIntInclusive(0,3);
+                spawnEnemyTwo();
+
+                getScore();
+            }
+            else if(shotX >= 1024){
                 shotX = shipX + 80;
                 shotSize = 0;
                 blockShotY = false;
                 shotBall = false;
             }
+            
         
         }
         if(blockShotY == false){
             shotY = shipY + (shipH / 2);
             };
 
-            
+        //heartSize
+        if(heartSizeAll == 3){
+            heartSize1 = 30;
+            heartSize2 = 30;
+            heartSize3 = 30;
+        }else if(heartSizeAll == 2){
+                heartSize1 = 30;
+                heartSize2 = 30;
+                heartSize3 = 0;
+        }else if(heartSizeAll == 1){
+                heartSize1 = 30;
+                heartSize2 = 0;
+                heartSize3 = 0;
+        }else if(heartSizeAll == 0){
+                heartSize1 = 0;
+                heartSize2 = 0;
+                heartSize3 = 0;
+            }
 
     
 }
