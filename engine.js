@@ -14,8 +14,14 @@ const backArt = new Image(); backArt.src = "./IMG/back.jpg";
 
 function back(){
     ctx.drawImage(backArt,0,0,cw,ch);
+
+    //enemy
     spawnEnemy();
+    if(score >= 100){
     spawnEnemyTwo();
+    }
+
+    //score
     ctx.fillStyle = 'white';
     ctx.font = "Italic 50px Times New Roman";
     ctx.textAlign = "left";
@@ -25,6 +31,11 @@ function back(){
         ctx.font = "Italic 30px Times New Roman";
     }
     ctx.fillText(score,900,40);
+
+    //shot
+    ctx.font = "Italic 30px Times New Roman";
+    ctx.fillText("Shot: " + allBullet,10,380);
+    reloadAnimation();
 
     //Life
    
@@ -85,20 +96,29 @@ const move = (e) => {
     
     
     //Shot
+    const bullet = new Image(); bullet.src = "./IMG/bullet.png";
     let shotX = shipX + 80;
     let shotY = 200;
     let shotSize = 10;
     let shotSpeed = 5;
     let shotBall = false;
     let blockShotY = false;
+
+    let allBullet = 3;
     
     function shot(){
         ctx.fillStyle = 'white';
-        ctx.fillRect(shotX,shotY,shotSize,shotSize);
+        ctx.drawImage(bullet,shotX,shotY,shotSize,shotSize);
         shotX += shotSpeed;
         
 
     
+    }
+
+    //reloadAnimation
+    const rBullet = new Image(); rBullet.src = "./IMG/reloadBullet.png";
+    function reloadAnimation(){
+        ctx.drawImage(rBullet, 110, 355, 25,30);
     }
 
     //Enemy
@@ -160,7 +180,7 @@ const move = (e) => {
         }
     
     //Score
-    let score = 100;
+    let score = 0;
     function getScore(){
         score += 10;
     }
@@ -209,6 +229,7 @@ const move = (e) => {
 
         ctx.drawImage(tableEnemy[losEnemy],enemyX,tableY[losEnemyY],enemySize,enemySize);
 
+        ctx.font = "Italic 50px Times New Roman";
         ctx.fillText(score,900,40);
 
         ctx.drawImage(lifeTab[0],30,150,heartSize1,heartSize1);
@@ -217,6 +238,9 @@ const move = (e) => {
         if(score >= 100){
             ctx.drawImage(tableEnemyTwo[losEnemyTwo],enemyXTwo,tableYTwo[losEnemyYTwo],enemySizeTwo,enemySizeTwo);
         }
+
+        ctx.font = "Italic 30px Times New Roman";
+        ctx.fillText("Shot: " + allBullet,10,380);
     }
     
     
