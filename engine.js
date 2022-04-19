@@ -39,9 +39,9 @@ function back(){
 
     //Life
    
-    ctx.drawImage(lifeTab[0],30,150,heartSize1,heartSize1);
-    ctx.drawImage(lifeTab[1],30,200,heartSize2,heartSize2);
-    ctx.drawImage(lifeTab[2],30,250,heartSize3,heartSize3);
+    ctx.drawImage(lifeTab[0],30,50,heartSize1,heartSize1);
+    ctx.drawImage(lifeTab[1],30,100,heartSize2,heartSize2);
+    ctx.drawImage(lifeTab[2],30,150,heartSize3,heartSize3);
 }
 
 //Ship
@@ -104,7 +104,7 @@ const move = (e) => {
     let shotBall = false;
     let blockShotY = false;
 
-    let allBullet = 3;
+    let allBullet = 2;
     
     function shot(){
         ctx.fillStyle = 'white';
@@ -117,9 +117,23 @@ const move = (e) => {
 
     //reloadAnimation
     const rBullet = new Image(); rBullet.src = "./IMG/reloadBullet.png";
+    let progress = 0; //40
     function reloadAnimation(){
         ctx.drawImage(rBullet, 110, 355, 25,30);
+
+
+        //progressBar
+        ctx.fillStyle = "red";
+        ctx.fillRect(100,390,progress,5);
+
+        if(allBullet <= 3){
+           var x = setInterval(()=>{progress += 1}, 3000);
+       
     }
+        if(progress >= 40){
+        clearInterval(x);
+    }
+}
 
     //Enemy
     const enemy1 = new Image(); enemy1.src = "./IMG/Enemy.png";
@@ -225,22 +239,33 @@ const move = (e) => {
         
     }
     function flashingAnimation(){ 
+        //back
+        ctx.fillStyle = 'white';
         ctx.drawImage(backArt,0,0,cw,ch);
 
+        //enemy
         ctx.drawImage(tableEnemy[losEnemy],enemyX,tableY[losEnemyY],enemySize,enemySize);
 
+        //score
         ctx.font = "Italic 50px Times New Roman";
         ctx.fillText(score,900,40);
 
-        ctx.drawImage(lifeTab[0],30,150,heartSize1,heartSize1);
-        ctx.drawImage(lifeTab[1],30,200,heartSize2,heartSize2);
-        ctx.drawImage(lifeTab[2],30,250,heartSize3,heartSize3);
+        //heart
+        ctx.drawImage(lifeTab[0],30,50,heartSize1,heartSize1);
+        ctx.drawImage(lifeTab[1],30,100,heartSize2,heartSize2);
+        ctx.drawImage(lifeTab[2],30,150,heartSize3,heartSize3);
+
+        //twoEnemy
         if(score >= 100){
             ctx.drawImage(tableEnemyTwo[losEnemyTwo],enemyXTwo,tableYTwo[losEnemyYTwo],enemySizeTwo,enemySizeTwo);
         }
 
+        //reload
         ctx.font = "Italic 30px Times New Roman";
         ctx.fillText("Shot: " + allBullet,10,380);
+        ctx.drawImage(rBullet, 110, 355, 25,30);
+        ctx.fillStyle = "red";
+        ctx.fillRect(100,390,progress,5);
     }
     
     
@@ -250,7 +275,7 @@ const move = (e) => {
         back();
         ship();
         loseLife();
-        console.log(heartSizeAll);
+        //console.log(heartSizeAll);
         if(shotBall == true){
            shot();
             if((shotX <= enemyX + enemySize)&& (shotY + shotSize / 2 >= tableY[losEnemyY]) && (shotY + shotSize / 2 <= tableY[losEnemyY] + enemySize) && (shotX >= enemyX)){
