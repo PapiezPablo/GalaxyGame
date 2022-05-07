@@ -32,11 +32,6 @@ function back(){
     }
     ctx.fillText(score,900,40);
 
-    //shot
-    ctx.font = "Italic 30px Times New Roman";
-    ctx.fillText("Shot: " + allBullet,10,380);
-    reloadAnimation();
-
     //Life
    
     ctx.drawImage(lifeTab[0],30,50,heartSize1,heartSize1);
@@ -114,26 +109,6 @@ const move = (e) => {
 
     
     }
-
-    //reloadAnimation
-    const rBullet = new Image(); rBullet.src = "./IMG/reloadBullet.png";
-    let progress = 0; //40
-    function reloadAnimation(){
-        ctx.drawImage(rBullet, 110, 355, 25,30);
-
-
-        //progressBar
-        ctx.fillStyle = "red";
-        ctx.fillRect(100,390,progress,5);
-
-        if(allBullet <= 3){
-           var x = setInterval(()=>{progress += 1}, 3000);
-       
-    }
-        if(progress >= 40){
-        clearInterval(x);
-    }
-}
 
     //Enemy
     const enemy1 = new Image(); enemy1.src = "./IMG/Enemy.png";
@@ -259,15 +234,10 @@ const move = (e) => {
         if(score >= 100){
             ctx.drawImage(tableEnemyTwo[losEnemyTwo],enemyXTwo,tableYTwo[losEnemyYTwo],enemySizeTwo,enemySizeTwo);
         }
-
-        //reload
-        ctx.font = "Italic 30px Times New Roman";
-        ctx.fillText("Shot: " + allBullet,10,380);
-        ctx.drawImage(rBullet, 110, 355, 25,30);
-        ctx.fillStyle = "red";
-        ctx.fillRect(100,390,progress,5);
-    }
+       
     
+    }
+  
     
 
     //Engine
